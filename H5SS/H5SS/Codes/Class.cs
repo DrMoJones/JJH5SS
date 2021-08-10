@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Security.Cryptography;
+using BC = BCrypt.Net.BCrypt;
 
 namespace H5SS.Codes
 {
@@ -15,6 +16,11 @@ namespace H5SS.Codes
             byte[] valueT = MD5.HashData(valueAsBytes);
             string hashedValueAsString = Convert.ToBase64String(valueT);
             return hashedValueAsString;
+        }
+
+        public string BcryptHash(string password)
+        {
+            return BC.HashPassword(password);
         }
     }
 }

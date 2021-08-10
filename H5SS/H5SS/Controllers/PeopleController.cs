@@ -15,10 +15,11 @@ namespace H5SS.Controllers
     [Route ("PeopleController/[controller]/[action]")]
     public class PeopleController : Controller
     {
+        // for at dependency injection fungere
         private readonly masterContext _context;
         private readonly Class _class;
-        int number = 23;
 
+        // de værdier der bliver givet videre er nødvendige for dependency injection
         public PeopleController(masterContext context, Class hash)
         {
             _class = hash;
@@ -28,7 +29,8 @@ namespace H5SS.Controllers
         // GET: People
         public async Task<IActionResult> Index()
         {
-            Console.WriteLine(_class.GetHashed("dwaddawdawd"));
+            Console.WriteLine(_class.GetHashed("dwdadwa"));
+            Console.WriteLine(_class.BcryptHash("Password1"));
             return View(await _context.People.ToListAsync());
         }
 
