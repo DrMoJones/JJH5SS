@@ -11,7 +11,7 @@ namespace H5SS.Areas.Identity.Codes
     {
         public async Task CreateRole(string user, string role, IServiceProvider _serviceProvider)
         {
-            //
+            //bliver brugt for give adgang til rollerne i vores database.
             var RoleManager = _serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             //Usermanager kan blive brugt til at lave database funktioner som at finde user via email
             var UserManager = _serviceProvider.GetRequiredService<UserManager<IdentityUser>>();

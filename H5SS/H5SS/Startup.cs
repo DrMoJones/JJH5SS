@@ -1,5 +1,5 @@
 using H5SS.Codes;
-using H5SS.Models.EFCore;
+using H5SS.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,15 +34,16 @@ namespace H5SS
             services.AddTransient<CryptoEx>();
 
             services.AddDataProtection();
-            var connection = Configuration.GetConnectionString("WebsiteConnect");
+            var connection = Configuration.GetConnectionString("H5SSContextConnection");
 
-            services.AddDbContext<masterContext>(options => options.UseSqlServer(connection));
+            //services.AddDbContext<masterContext>(options => options.UseSqlServer(connection));
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequiredAuthenticatedUser", policy => {
                     policy.RequireAuthenticatedUser();
                 });
+                //options.AddPolicy("A", policy => policy.AddAuthenticationSchemes("Admin"));
             });
         }
 

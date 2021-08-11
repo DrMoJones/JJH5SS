@@ -44,7 +44,7 @@ namespace H5SS.Controllers
         [Authorize("RequiredAuthenticatedUser")]
         public async Task<IActionResult> Index()
         {
-            //await _userRoleHandler.CreateRole("jaa@dk.com", "Admin", _serviceProvider);
+            await _userRoleHandler.CreateRole("jaaa@dk.com", "Admin", _serviceProvider);
             Console.WriteLine(_cryptoEx.Encrypt("dnogeniawniodaw", _dataProtector));
             string dw = _cryptoEx.Encrypt("dnogeniawniodaw", _dataProtector);
             Console.WriteLine(_cryptoEx.Decrypt(dw, _dataProtector));
