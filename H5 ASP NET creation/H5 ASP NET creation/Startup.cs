@@ -1,8 +1,9 @@
-using H5SS.Codes;
-using H5SS.Models.EFCore;
+using H5_ASP_NET_creation.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,9 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using H5SS.Areas.Identity.Codes;
 
-namespace H5SS
+namespace H5_ASP_NET_creation
 {
     public class Startup
     {
@@ -27,23 +27,14 @@ namespace H5SS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Addsingleton eller addtransient for at starte med dependency injection.
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
-            services.AddSingleton<Class>();
-            services.AddTransient<UserRoleHandler>();
-            services.AddTransient<CryptoEx>();
-
-            services.AddDataProtection();
-            var connection = Configuration.GetConnectionString("WebsiteConnect");
-
-            services.AddDbContext<masterContext>(options => options.UseSqlServer(connection));
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequiredAuthenticatedUser", policy => {
-                    policy.RequireAuthenticatedUser();
-                });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +43,7 @@ namespace H5SS
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -67,13 +59,11 @@ namespace H5SS
             app.UseAuthentication();
             app.UseAuthorization();
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                
                 endpoints.MapRazorPages();
             });
         }
