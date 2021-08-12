@@ -29,14 +29,16 @@ namespace H5SS
         {
             //Addsingleton eller addtransient for at starte med dependency injection.
             services.AddControllersWithViews();
-            services.AddSingleton<Class>();
+            services.AddSingleton<HashingEx>();
             services.AddTransient<UserRoleHandler>();
             services.AddTransient<CryptoEx>();
+
 
             services.AddDataProtection();
             var connection = Configuration.GetConnectionString("H5SSContextConnection");
 
-            //services.AddDbContext<masterContext>(options => options.UseSqlServer(connection));
+            //Skal være der for at oprette forbindelse til databasen sådan at views og controllers fungerer ellers kan de ikke indsætte data
+            services.AddDbContext<H5SSContext>(options => options.UseSqlServer(connection));
 
             services.AddAuthorization(options =>
             {

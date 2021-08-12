@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using H5SS.Areas.Identity.Codes;
 using Microsoft.AspNetCore.DataProtection;
 using H5SS.Codes;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace H5SS.Controllers
 {
@@ -23,7 +25,7 @@ namespace H5SS.Controllers
         private readonly UserRoleHandler _userRoleHandler;
         private readonly IDataProtector _dataProtector;
         private readonly CryptoEx _cryptoEx;
-        
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public HomeController(
             //Tilegning af referencen 
@@ -31,23 +33,36 @@ namespace H5SS.Controllers
             IServiceProvider serviceProvider, 
             UserRoleHandler userRoleHandler,
             IDataProtectionProvider dataProtector,
-            CryptoEx cryptoEx)
+            CryptoEx cryptoEx,
+            SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
             _userRoleHandler = userRoleHandler;
             _dataProtector = dataProtector.CreateProtector("MinNoegle");
             _cryptoEx = cryptoEx;
+            _signInManager = signInManager;
 
         }
 
         [Authorize("RequiredAuthenticatedUser")]
         public async Task<IActionResult> Index()
         {
-            await _userRoleHandler.CreateRole("jaaa@dk.com", "Admin", _serviceProvider);
-            Console.WriteLine(_cryptoEx.Encrypt("dnogeniawniodaw", _dataProtector));
-            string dw = _cryptoEx.Encrypt("dnogeniawniodaw", _dataProtector);
-            Console.WriteLine(_cryptoEx.Decrypt(dw, _dataProtector));
+
+            #region Testing
+            var UserManager = _serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var User = UserManager.GetUserName(this.User);
+            //checking they exists
+            var u = _signInManager.IsSignedIn(this.User);
+            Console.WriteLine(User);
+
+            string Text1 = _cryptoEx.Encrypt("dnogeniawniodaw", _dataProtector);
+            string Text2 = _cryptoEx.Decrypt(Text1, _dataProtector);
+
+
+            #endregion
+
+
             return View();
         }
 

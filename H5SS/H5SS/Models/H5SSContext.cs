@@ -24,14 +24,13 @@ namespace H5SS.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
-        public virtual DbSet<Test> Tests { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=H5SS;Trusted_Connection=True;MultipleActiveResultSets=true");
+               optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=H5SS;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -134,15 +133,18 @@ namespace H5SS.Models
                     .HasForeignKey(d => d.UserId);
             });
 
-            modelBuilder.Entity<Test>(entity =>
+            modelBuilder.Entity<Wishlist>(entity =>
             {
-                entity.ToTable("Test");
+                entity.ToTable("Wishlist");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(256);
 
-                entity.Property(e => e.Dwad)
-                    .HasMaxLength(250)
-                    .HasColumnName("dwad");
+                entity.Property(e => e.Note);
+
+                entity.Property(e => e.Wish)
+                    .IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

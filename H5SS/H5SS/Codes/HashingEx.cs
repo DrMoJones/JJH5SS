@@ -8,7 +8,7 @@ using BC = BCrypt.Net.BCrypt;
 
 namespace H5SS.Codes
 {
-    public class Class
+    public class HashingEx
     {
         public string GetHashed(string valueToHash)
         {
@@ -21,6 +21,11 @@ namespace H5SS.Codes
         public string BcryptHash(string password)
         {
             return BC.HashPassword(password);
+        }
+
+        public bool BcryptVerify(string password, string hashedPassword)
+        {            
+            return BC.Verify(password, hashedPassword);
         }
     }
 }

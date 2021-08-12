@@ -1,6 +1,7 @@
-﻿CREATE TABLE Person
+﻿CREATE TABLE Wishlist
 (
 	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	[Navn] VARCHAR(1000) not null,
-	[Password] VARCHAR(1000) not null
+	[Email] NVARCHAR(256) NOT NULL,
+	[Wish] NVARCHAR(256) NOT NULL,
+	[Note] NVARCHAR(256)
 )
